@@ -52,11 +52,10 @@ class HttpBase {
 	
 	//发送请求，获取result，带重试
 	public function postResult($url,$fields,$retries){
-                echo "url is $url";
-                echo "fields is $fields";
-                echo "begin request";
+                //echo "url is $url";
+                // echo "fields is $fields";
+                //echo "begin request";
 		$result = new Result($this->postReq($url, $fields));
-                echo $result;
 		if($result->getErrorCode() == ErrorCode::Success){
 		    return $result;
 		}
@@ -74,9 +73,9 @@ class HttpBase {
 	public function postReq($url,$fields,$timeout=10){
 	    $headers = array('Authorization: key=' . $this->appSecret, 'Content-Type: application/x-www-form-urlencoded');
 	    // Open connection
-            echo "internet befor init";
+            //echo "internet befor init";
 	    $ch = curl_init();
-	    echo "internet init finished";
+	    //echo "internet init finished";
 	    // Set the url, number of POST vars, POST data
 	    curl_setopt($ch, CURLOPT_URL, $url);
 	    curl_setopt($ch, CURLOPT_POST, true);
@@ -85,8 +84,8 @@ class HttpBase {
 	    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 	    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 	    curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($fields));
-	    print_r('HTTP Params <br> '.urldecode(http_build_query($fields)));
-	    echo'<br>';
+	    //print_r('HTTP Params <br> '.urldecode(http_build_query($fields)));
+	    //echo'<br>';
 	    // Execute post
 	    $result = curl_exec($ch);
 	    	

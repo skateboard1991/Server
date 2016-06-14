@@ -1,6 +1,6 @@
 <?php
-   use flowcontrol\managerclient\library\SQLManager;
-   include "./library/SQLManager.php";
+   use flowcontrol\library\SQLManager;
+   include "../library/SQLManager.php";
  if(empty($_GET['ordernumber']))
   {
   	print_r("don't have ordernumber in request");

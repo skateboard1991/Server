@@ -1,5 +1,5 @@
 <?php
-namespace flowcontrol\managerclient\library;
+namespace flowcontrol\library;
 use xmpush\Builder;
 use xmpush\HttpBase;
 use xmpush\Sender;
@@ -14,22 +14,34 @@ include_once(dirname(__FILE__).'/autoload.php');
 
 class XMManager
 {
-    private static $secret;
-    private static $package;
+    private $secret= 'vo4L6VoAR5Bu2qdjP0FI2g==';
+    private $groupPackage= 'com.skateboard.groupclient';
+    private $managerPackage='com.skateboard.managerclient';
+    private $groupUserAccount="group";
+    private $managerUserAccount="manager";
 
 	public function __construct()
 	{
-		$secret = '0CjeTNwI0lk2vjCb0tx40w==';
-        $package = 'com.skateboard.pushdemo';
+		
         // 常量设置必须在new Sender()方法之前调用
-        Constants::setPackage($package);
-        Constants::setSecret($secret);
+        Constants::setSecret($this->secret);
         Constants::useOfficial();
 	}
 
-    public function sendPushToNext($useraccount,$title,$desc,$payload)
+    public function sendPushToNext($title,$desc,$payload)
     {
+        Constants::setPackage($this->groupPackage);
+        $this->sendMessage($title,$desc,$payload,$this->groupUserAccount);
+    }
 
+    public function sendFinishMessageToServer($title,$desc,$payload)
+    {
+        Constants::setPackage($this->managerPackage);
+        $this->sendMessage($title,$desc,$payload,$this->managerUserAccount);
+    }
+
+    public function sendMessage($title,$desc,$payload,$userAccount)
+    {
          $sender = new Sender();
 
          // message1 演示自定义的点击行为
@@ -38,14 +50,14 @@ class XMManager
          $message1->description($desc); // 通知栏的descption
          $message1->passThrough(0);  // 这是一条通知栏消息，如果需要透传，把这个参数设置成1,同时去掉title和descption两个参数
          $message1->payload($payload); // 携带的数据，点击后将会通过客户端的receiver中的onReceiveMessage方法传入。
-         $message2->extra(Builder::notifyEffect, 1); // 此处设置预定义点击行为，1为打开app
+         $message1->extra(Builder::notifyEffect, 1); // 此处设置预定义点击行为，1为打开app
          $message1->extra(Builder::notifyForeground, 1); // 应用在前台是否展示通知，如果不希望应用在前台时候弹出通知，则设置这个参数为0
          $message1->notifyId(2); // 通知类型。最多支持0-4 5个取值范围，同样的类型的通知会互相覆盖，不同类型可以在通知栏并存
          $message1->build();
          $targetMessage = new TargetedMessage();
-         $targetMessage->setTarget($useraccount, TargetedMessage::TARGET_TYPE_USER_ACCOUNT); // 设置发送目标。可通过regID,alias和topic三种方式发送
+         $targetMessage->setTarget($userAccount, TargetedMessage::TARGET_TYPE_USER_ACCOUNT); // 设置发送目标。可通过regID,alias和topic三种方式发送
          $targetMessage->setMessage($message1);
-         $sender->sendToAlias($message1,$aliasList[0]);
+         $sender->sendToUserAccount($message1,$userAccount);
     }
 
 

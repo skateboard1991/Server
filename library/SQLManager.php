@@ -1,5 +1,5 @@
 <?php
-   namespace flowcontrol\managerclient\library;
+   namespace flowcontrol\library;
    class SQLManager
    {
       private $serverName="localhost";

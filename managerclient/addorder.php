@@ -1,13 +1,13 @@
 <?php
-  use flowcontrol\managerclient\library\SQLManager;
-  use flowcontrol\managerclient\library\XMManager;
-  include "./library/XMManager.php";
-  include "./library/SQLManager.php";
+  header('Content-Type: text/html; charset=utf-8');
+  use flowcontrol\library\SQLManager;
+  include "../library/SQLManager.php";
   $tableName="ORDER_LIST";
   $databaseName="ORDERS";
   $sqlManager=new SQLManager($databaseName,$tableName);
   if(empty($_POST['ordernumber']))
   {
+
   	echo "ordernumber can't empty";
   	die();
   }
@@ -62,13 +62,22 @@
 
   $insertSen="INSERT INTO $tableName (DATE,ORDERNUMBER,TYPE,VOLTAGE,SIZE,AMOUNT,STATE,NOTE) VALUES (\"$date\",$ordernumber,\"$type\",$voltage,\"$size\",$amount,\"$state\",\"$note\")";
   $result=$sqlManager->exec($insertSen);
-
-
+  // if($result==0)
+  // {
+  //   print_r("insert failed");
+  //   die();
+  // }
+  // else
+  // {
+  //   print_r("insert success");
+  // }
   //create ordernumber process table
-  $creSen="CREATE TABLE ORDER$ordernumber (ID INT NOT NULL PRIMARY KEY AUTO_INCREMENT, DATE TEXT,PROCESS TEXT)";
-  $sqlManager->exec($creSen);
-    echo "success";
+
+  
+  // $updateSen="update $tableName set STATE=\"订单建立\"";
+  // $sqlManager->exec($updateSen);
+  print_r("success");
   //send order to next
-  // $xmManager=new XMManager();
-  // $xmManager->sendPushToNext("");
+    // $xmManager=new XMManager();
+    // $xmManager->sendPushToNext("");
 ?>
